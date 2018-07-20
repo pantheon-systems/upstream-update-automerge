@@ -1,7 +1,7 @@
 FROM alpine:3.8
 
 # Install packages
-RUN apk --no-cache add gnupg haveged
+RUN apk --no-cache add gnupg haveged bash
 
 # Set the working directory
 WORKDIR /gnupg
