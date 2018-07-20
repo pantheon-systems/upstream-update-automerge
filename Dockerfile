@@ -10,8 +10,7 @@ WORKDIR /gnupg
 ADD . /gnupg
 
 # Create an unpriviliged user
-RUN groupadd -g 999 builder && \
-    useradd -r -m -u 999 -g builder builder && \
+RUN adduser -D -u 1000 builder && \
     chown -R builder /usr/local && \
     chown -R builder /gnupg
 USER builder
