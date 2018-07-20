@@ -4,10 +4,12 @@ FROM alpine:3.8
 RUN apk --no-cache add gnupg haveged bash git rsync openssh
 
 # Set the working directory
-WORKDIR /gnupg
+WORKDIR /upstream-update
 
 # Copy the current directory contents into the container at our working directory
-ADD . /gnupg
+ADD . /upstream-update
+
+RUN ln -s /upstream-update/bin/automerge.sh /usr/local/bin/automerge.sh
 
 # Create an unpriviliged user
 RUN adduser -D -u 1000 builder && \
