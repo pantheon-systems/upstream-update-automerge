@@ -23,9 +23,9 @@ origin=$(git config --get remote.origin.url | sed -e 's#git@github.com:#https://
 origin=$(echo $origin | sed -e "s#https://github.com#https://$GITHUB_TOKEN:x-oauth-basic@github.com#")
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch $origin master | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
-git checkout master
-git checkout -
+git fetch $origin master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git checkout master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git checkout - 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 
 # Commits on the 'default' branch not yet on master in reverse order (oldest first),
 # ignoring any commit that modifies only files in .circleci
@@ -46,23 +46,23 @@ set -ex
 git config --global user.email "<bot@getpantheon.com>"
 git config --global user.name "Pantheon Automation"
 
-git checkout master
+git checkout master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 for commit in $commits ; do
-  git cherry-pick $commit
+  git cherry-pick $commit 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 done
 
 # If the top commit looks like an upstream update, make sure that it is
 # authored by Pantheon Automation.
 current_comment=$(git log --pretty=format:"%s" -1)
 if [[ "$current_comment" == *"see https://"* ]] ; then
-  git commit --amend --author="Pantheon Automation <bot@getpantheon.com>" -m "$current_comment"
+  git commit --amend --author="Pantheon Automation <bot@getpantheon.com>" -m "$current_comment" 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 fi
 
-git checkout -
-git rebase master
+git checkout - 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git rebase master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 
 set +ex
 
 # Push updated master and default branches back up
-git push -u $origin master | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
-git push -u $origin default --force | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git push -u $origin master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git push -u $origin default --force 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
