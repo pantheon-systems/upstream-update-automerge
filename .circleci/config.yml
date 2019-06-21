@@ -1,0 +1,10 @@
+---
+version: 2
+jobs:
+  test-automerge:
+    docker:
+      - image: alpine:3.8
+    working_directory: /automerge
+    steps:
+      - checkout
+      - run: python test.py

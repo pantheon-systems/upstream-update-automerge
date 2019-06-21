@@ -38,6 +38,17 @@ if [ -z "$commits" ] ; then
   exit 0
 fi
 
+# Check to see who the top author is
+author="$(git log --pretty=format:"%an %ae" -1)"
+
+# Let commits by any user other than Pantheon Automation sit in the
+# default branch until we get a commit from Pantheon Automation.
+if [ "$author" != "Pantheon Automation bot@getpantheon.com" ] ; then
+  echo "Top commit is not by Pantheon Automation bot. Leaving the following commits on default branch:"
+  git log master..HEAD --pretty=format:"%Cred%h %Cblue%cd %Cgreen%an%Creset %s"
+  exit 0
+fi
+
 echo ":::::::::: Auto-merging to master ::::::::::"
 
 set -ex
