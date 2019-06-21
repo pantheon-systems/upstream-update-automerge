@@ -8,6 +8,8 @@ jobs:
     steps:
       - checkout
       - run: apk add --no-cache git
+      - run: git config --global user.email "circleci@example.com"
+      - run: git config --global user.name "CircleCI"
       - run: python test.py
 
 workflows:
