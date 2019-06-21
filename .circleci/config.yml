@@ -7,10 +7,10 @@ jobs:
     working_directory: /automerge
     steps:
       - checkout
-      - run: apk add --no-cache git
+      - run: apk add --no-cache git bash
       - run: git config --global user.email "circleci@example.com"
       - run: git config --global user.name "CircleCI"
-      - run: python test.py
+      - run: GITHUB_TOKEN=111111111 python test.py
 
 workflows:
   version: 2
