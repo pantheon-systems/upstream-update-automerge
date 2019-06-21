@@ -22,20 +22,9 @@
 #
 
 import os
-import pwd
-import errno
-import pprint
-import re
 import subprocess
-import random
-import signal
-import sys
-import time
-import json
 import shutil
 import tempfile
-
-import requests
 import unittest
 
 
