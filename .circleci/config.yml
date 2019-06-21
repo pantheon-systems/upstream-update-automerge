@@ -3,7 +3,7 @@ version: 2
 jobs:
   test-automerge:
     docker:
-      - image: alpine:3.8
+      - image: python:2.7.16-stretch
     working_directory: /automerge
     steps:
       - checkout
