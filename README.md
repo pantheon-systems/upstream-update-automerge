@@ -16,3 +16,6 @@ In CircleCI 2.0:
 
 - gnupg
 
+## Test
+
+python test.py
