@@ -8,3 +8,9 @@ jobs:
     steps:
       - checkout
       - run: python test.py
+
+workflows:
+  version: 2
+  automerge:
+    jobs:
+      - test-automerge
