@@ -1,0 +1,19 @@
+---
+version: 2
+jobs:
+  test-automerge:
+    docker:
+      - image: python:2.7.16-alpine
+    working_directory: /automerge
+    steps:
+      - checkout
+      - run: apk add --no-cache git bash
+      - run: git config --global user.email "circleci@example.com"
+      - run: git config --global user.name "CircleCI"
+      - run: GITHUB_TOKEN=111111111 python test.py
+
+workflows:
+  version: 2
+  automerge:
+    jobs:
+      - test-automerge
