@@ -1,12 +1,16 @@
 #!/bin/bash
 
+
 #
 # The purpose of this script is to take all of the commits from the "default"
 # branch and merge them onto the "master" branch. When we are doing this, we
 # will skip any commit that modifies anything in the `./circleci` directory.
 #
+
+# Tell git to never use a pager
+git config --global core.pager cat
+
 # We expect that the environment variable GITHUB_TOKEN is already defined.
-#
 branch=$(git rev-parse --abbrev-ref HEAD)
 
 if [ "$branch" != "default" ] ; then
