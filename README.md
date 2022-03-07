@@ -1,5 +1,7 @@
 # Upstream Update Build Docker Image
 
+[![Deprecated](https://img.shields.io/badge/Pantheon-Deprecated-yellow?logo=pantheon&color=FFDC28)](https://pantheon.io/docs/oss-support-levels#deprecated)
+
 [![docker pull quay.io/getpantheon/upstream-update-build](https://img.shields.io/badge/image-quay-blue.svg)](https://quay.io/repository/getpantheon/upstream-update-build)
 
 This is the source Dockerfile for the [getpantheon/upstream-update-build](https://quay.io/repository/getpantheon/upstream-update-build) docker image.
