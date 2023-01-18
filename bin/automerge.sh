@@ -76,7 +76,7 @@ fi
 git checkout - 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 git rebase master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 
-set +ex
+set +x
 
 # Push updated master and default branches back up
 git push -u $origin master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
