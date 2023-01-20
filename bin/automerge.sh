@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exo pipefail
+set -o pipefail
 
 #
 # The purpose of this script is to take all of the commits from the "default"
@@ -23,7 +23,7 @@ if [ -z "$GITHUB_TOKEN" ] ; then
 fi
 
 # Look up the remote origin, and alter it to use https with oauth.
-origin=$(git config --get remote.origin.url 
+origin=$(git config --get remote.origin.url) 
 origin=$(echo $origin) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
@@ -54,6 +54,7 @@ if [ "$author" != "Pantheon Automation bot@getpantheon.com" ] ; then
 fi
 
 echo ":::::::::: Auto-merging to master ::::::::::"
+set -ex
 
 # Log our actions (e.g. cherry-picks) as Pantheon Automation
 git config --global user.email "<bot@getpantheon.com>"
