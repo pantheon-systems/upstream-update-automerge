@@ -55,15 +55,15 @@ fi
 
 echo ":::::::::: Auto-merging to master ::::::::::"
 
-set -ex
+set -ex -o pipefail
 
 # Log our actions (e.g. cherry-picks) as Pantheon Automation
 git config --global user.email "<bot@getpantheon.com>"
 git config --global user.name "Pantheon Automation"
 
-git checkout master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git checkout master 2>&1
 for commit in $commits ; do
-  git cherry-pick $commit 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+  git cherry-pick $commit 2>&1
 done
 
 # If the top commit looks like an upstream update, make sure that it is
@@ -73,11 +73,9 @@ if [[ "$current_comment" == *"see https://"* ]] ; then
   git commit --amend --author="Pantheon Automation <bot@getpantheon.com>" -m "$current_comment" 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
 fi
 
-git checkout - 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
-git rebase master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
-
-set +x
+git checkout - 2>&1
+git rebase master 2>&1
 
 # Push updated master and default branches back up
-git push -u $origin master 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
-git push -u $origin default --force 2>&1 | sed -e "s#$GITHUB_TOKEN#[REDACTED]#g"
+git push -u $origin master 2>&1
+git push -u $origin default --force 2>&1
