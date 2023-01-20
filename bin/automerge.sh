@@ -24,7 +24,7 @@ fi
 
 # Look up the remote origin, and alter it to use https with oauth.
 origin=$(git config --get remote.origin.url 
-origin=$(echo $origin 
+origin=$(echo $origin) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
 git fetch $origin master 2>&1 
