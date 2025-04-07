@@ -10,7 +10,6 @@ set -o pipefail
 # Tell git to never use a pager
 git config --global core.pager cat
 
-# We expect that the environment variable GITHUB_TOKEN is already defined.
 branch=$(git rev-parse --abbrev-ref HEAD)
 
 if [ "$branch" != "default" ] ; then
@@ -18,21 +17,17 @@ if [ "$branch" != "default" ] ; then
   exit 1
 fi
 
-if [ -z "$GITHUB_TOKEN" ] ; then
-  echo "The automerge script requires that the GITHUB_TOKEN environment variable be defined." >&2
-fi
-
 # Look up the remote origin, and alter it to use https with oauth.
 origin=$(git config --get remote.origin.url) 
-origin=$(echo $origin) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch $origin master 2>&1 
+git fetch "$origin" master 2>&1 
 git checkout master 2>&1 
 git checkout - 2>&1 
 
 # Commits on the 'default' branch not yet on master in reverse order (oldest first),
-# ignoring any commit that modifies only files in .circleci
+# ignoring any commit that modifies only files in .circleci or in .github
+# TODO: This should ignore if _any_ change is in one of these directories, not all changes.
 commits=$(git log master..HEAD --pretty=format:"%h" -- . ':!.circleci' ':!.github' | sed '1!G;h;$!d')
 
 # If nothing has changed, bail without doing anything.
@@ -62,7 +57,7 @@ git config --global user.name "Pantheon Automation"
 
 git checkout master 2>&1
 for commit in $commits ; do
-  git cherry-pick $commit 2>&1
+  git cherry-pick "$commit" 2>&1
 done
 
 # If the top commit looks like an upstream update, make sure that it is
@@ -76,5 +71,5 @@ git checkout - 2>&1
 git rebase master 2>&1
 
 # Push updated master and default branches back up
-git push -u $origin master 2>&1
-git push -u $origin default --force 2>&1
+git push -u "$origin" master 2>&1
+git push -u "$origin" default --force 2>&1

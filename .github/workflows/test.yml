@@ -1,0 +1,12 @@
+name: Test
+
+on: [pull_request]
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck bin/automerge.sh
+      - name: Run script with system Python
+        run: python3 test.py
