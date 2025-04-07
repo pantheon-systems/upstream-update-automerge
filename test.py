@@ -145,7 +145,11 @@ class AutomergeTestCase(unittest.TestCase):
             self.createBranch('default')
             os.mkdir(self.repo + '/.circleci')
             self.writeFile('.circleci/config.yml', '# Fake CircleCI configuration file')
+            os.mkdir(self.repo + '/.github')
+            os.mkdir(self.repo + '/.github/workflows')
+            self.writeFile('.github/workflows/update_tag1_d7es.yml', '# Fake GHA Workflow file')
             self.git(["add", '.circleci/config.yml'])
+            self.git(["add", '.github/workflows/update_tag1_d7es.yml'])
             self.commitAsBot("Add CircleCI configuration")
 
             logOutput = self.log()
