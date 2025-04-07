@@ -28,7 +28,7 @@ git checkout - 2>&1
 # Commits on the 'default' branch not yet on master in reverse order (oldest first),
 # ignoring any commit that modifies only files in .circleci or in .github
 # TODO: This should ignore if _any_ change is in one of these directories, not all changes.
-commits=$(git log master..HEAD --pretty=format:"%h" -- . ':!.circleci' ':!.github' | sed '1!G;h;$!d')
+commits=$(git log master..HEAD --pretty=format:"%h" -- . ':!.circleci'  | sed '1!G;h;$!d')
 
 # If nothing has changed, bail without doing anything.
 if [ -z "$commits" ] ; then
