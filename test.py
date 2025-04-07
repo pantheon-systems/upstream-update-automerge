@@ -106,6 +106,9 @@ class AutomergeTestCase(unittest.TestCase):
     def log(self):
         output = self.git(["log", "--pretty=format:%an <%ae> %s"])
         return output
+    
+    def normalize_string(s):
+        return '\n'.join(line.strip() for line in s.strip().splitlines())
 
     def testAutomerge(self):
         self.project_under_test = os.getcwd()
@@ -136,7 +139,10 @@ class AutomergeTestCase(unittest.TestCase):
             self.git(["remote", "add", "origin", "file://" + self.origin])
 
             logOutput = self.log()
-            assert 'Pantheon Automation <bot@getpantheon.com> Initial commit' == logOutput.strip()
+            expected = 'Pantheon Automation <bot@getpantheon.com> Initial commit'
+            print('EXPECTED:', repr(expected))
+            print('ACTUAL:', repr(logOutput.strip()))
+            assert expected == logOutput.strip()
 
             # CONTROL PART II:
             #
