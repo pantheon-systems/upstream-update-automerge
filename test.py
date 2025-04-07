@@ -200,7 +200,8 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             self.commitAsUser('Add a commit as a user')
             logOutput = self.log()
 
-            print "Log output in question: " + logOutput
+            print("Log output in question:")
+            print(logOutput)
 
             # Assert that our test commit is now at the HEAD of the default branch.
             assert """J. Doe <doe@example.com> Add a commit as a user
@@ -214,8 +215,8 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             self.switchBranch('default')
             logOutput = self.log()
 
-            print "Log of default branch after script: " + logOutput
-
+            print("Log of default branch after script: ")
+            print(logOutput)
             # Assert that the 'default' branch has not changed.
             assert """J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
@@ -273,7 +274,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
 
         finally:
             shutil.rmtree(self.tmpdir)
-            print "Done!"
+            print("Done!")
 
 if __name__ == "__main__":
     unittest.main()
