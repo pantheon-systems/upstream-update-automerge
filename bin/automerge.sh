@@ -21,9 +21,9 @@ fi
 origin=$(git config --get remote.origin.url) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch "$origin" master 2>&1 
-git checkout master 2>&1 
-git checkout - 2>&1 
+git fetch "$origin" master 
+git checkout master 
+git checkout - 
 
 # Commits on the 'default' branch not yet on master in reverse order (oldest first),
 # ignoring any commit that modifies only files in .circleci or in .github
@@ -55,21 +55,21 @@ set -ex
 git config --global user.email "<bot@getpantheon.com>"
 git config --global user.name "Pantheon Automation"
 
-git checkout master 2>&1
+git checkout master
 for commit in $commits ; do
-  git cherry-pick "$commit" 2>&1
+  git cherry-pick "$commit"
 done
 
 # If the top commit looks like an upstream update, make sure that it is
 # authored by Pantheon Automation.
 current_comment=$(git log --pretty=format:"%s" -1)
 if [[ "$current_comment" == *"see https://"* ]] ; then
-  git commit --amend --author="Pantheon Automation <bot@getpantheon.com>" -m "$current_comment" 2>&1 
+  git commit --amend --author="Pantheon Automation <bot@getpantheon.com>" -m "$current_comment" 
 fi
 
-git checkout - 2>&1
-git rebase master 2>&1
+git checkout -
+git rebase master
 
 # Push updated master and default branches back up
-git push -u "$origin" master 2>&1
-git push -u "$origin" default --force 2>&1
+git push -u "$origin" master
+git push -u "$origin" default --force
