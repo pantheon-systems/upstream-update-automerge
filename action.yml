@@ -2,7 +2,7 @@ name: Upstream Update Automerge
 description: Merge updates from default to master while skipping CI-only commits.
 author: pantheon-systems
 
-run:
+runs:
    using: "composite"
    steps:
     - name: Automerge
