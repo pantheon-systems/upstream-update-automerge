@@ -8,3 +8,5 @@ runs:
     - name: Automerge
       shell: bash
       run: ${{ github.action_path }}/bin/automerge.sh
+      env:
+        REPO: ${{ github.repository }}

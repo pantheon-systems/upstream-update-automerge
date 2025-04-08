@@ -7,6 +7,15 @@ set -o pipefail
 # will skip any commit that modifies anything in the `./circleci` directory.
 #
 
+if [[ -z "${PAT_TOKEN:-}" ]]; then
+  echo "The automerge script expects a personal access token set in the env variable PAT_TOKEN"
+  exit 1
+fi
+if [[ -z "${REPO:-}" ]]; then
+  echo 'The automerge script expects REPO to be set to ${{ github.repository }}, but it is empty.'
+  exit 1
+fi
+
 # Tell git to never use a pager
 git config --global core.pager cat
 
@@ -17,11 +26,9 @@ if [ "$branch" != "default" ] ; then
   exit 1
 fi
 
-# Look up the remote origin, and alter it to use https with oauth.
-origin=$(git config --get remote.origin.url) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch "$origin" master 
+git fetch origin master 
 git checkout master 
 git checkout - 
 
@@ -71,5 +78,8 @@ git checkout -
 git rebase master
 
 # Push updated master and default branches back up
+
+git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${REPO}.git"
+
 git push -u "$origin" master
 git push -u "$origin" default --force

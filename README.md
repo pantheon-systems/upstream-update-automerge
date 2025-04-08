@@ -18,7 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
         - uses: pantheon-systems/upstream-update-build@action
+          env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 ```
 
 ## Test
