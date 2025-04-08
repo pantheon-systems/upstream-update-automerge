@@ -81,5 +81,5 @@ git rebase master
 
 git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${REPO}.git"
 
-git push -u "$origin" master
-git push -u "$origin" default --force
+git push -u origin master
+git push -u origin default --force
