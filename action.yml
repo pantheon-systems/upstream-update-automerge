@@ -7,4 +7,4 @@ run:
    steps:
     - name: Automerge
       shell: bash
-      run bin/automerge.sh
+      run: bin/automerge.sh
