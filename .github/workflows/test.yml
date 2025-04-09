@@ -17,4 +17,5 @@ jobs:
       - name: Test
         env:
           PAT_TOKEN: "12345"
+          REPO: ${{ github.repository }}
         run: python3 test.py
