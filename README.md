@@ -6,9 +6,9 @@ This action runs the "automerge" script used to deploy changes from the `default
 ```
 name: Automerge
 on:
-    push:
-      branches:
-        - default
+  push:
+    branches:
+      - default
 
 permissions:
   contents: write
@@ -26,7 +26,7 @@ jobs:
 ```
 
 ### PAT_TOKEN
-`PAT_TOKEN` must be a personal access token with permission to force-push to branches of the project this action is run on. The `default` branch is force-pushed each time a release to master is made.
+`PAT_TOKEN` must be a personal access token with permission to force-push to branches of the project this action is run on.
 
 ## Test
 
