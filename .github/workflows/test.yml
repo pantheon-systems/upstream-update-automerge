@@ -1,0 +1,21 @@
+name: Test
+
+on: [pull_request]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck bin/automerge.sh
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "uname@email.com"
+      - run: git config --global user.name "User Name"
+      - name: Test
+        env:
+          PAT_TOKEN: "12345"
+          AUTOMERGE_CI_TESTING: "true"
+        run: python3 test.py

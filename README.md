@@ -1,23 +1,33 @@
-# Upstream Update Build Docker Image
+# Upstream Update "Automerge"
 
-[![Deprecated](https://img.shields.io/badge/Pantheon-Deprecated-yellow?logo=pantheon&color=FFDC28)](https://pantheon.io/docs/oss-support-levels#deprecated)
+This action runs the "automerge" script used to deploy changes from the `default` branch to the `master` branch on Pantheon's upstream repositories (`wordpress`, `drops-7`). Automerge copies commits to the `master` branch if the latest commit on `default` is authored by `"Pantheon Automation <bot@getpantheon.com>"`. It then rebases the `default` branch onto `master` and updates `default` with a force push. Commits that edit `.circleci/` or `.github/` directories are not copied to `master`.
 
-[![docker pull quay.io/getpantheon/upstream-update-build](https://img.shields.io/badge/image-quay-blue.svg)](https://quay.io/repository/getpantheon/upstream-update-build)
-
-This is the source Dockerfile for the [getpantheon/upstream-update-build](https://quay.io/repository/getpantheon/upstream-update-build) docker image.
-
-This docker image is used to build updates for Pantheon-maintained upstreams (drops-8 et. al.) from their respective upstreams.
-
-## Usage
-In CircleCI 2.0:
+## Usage 
 ```
-  docker:
-    - image: quay.io/getpantheon/upstream-update-build:1.x
-```
-## Image Contents
+name: Automerge
+on:
+  push:
+    branches:
+      - default
 
-- gnupg
+permissions:
+  contents: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - uses: pantheon-systems/upstream-update-build@v1
+          env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+```
+
+### PAT_TOKEN
+`PAT_TOKEN` must be a personal access token with permission to force-push to branches of the project this action is run on.
 
 ## Test
 
-python test.py
+python3 test.py

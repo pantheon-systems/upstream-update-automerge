@@ -3,24 +3,6 @@
 
 #pylint: disable=broad-except,redefined-outer-name,protected-access,no-name-in-module,not-context-manager
 
-#
-# Usage:
-#
-# Run all tests against PHP 7.3:
-#
-#   python test-yolo.py 7.3
-#
-# Run all tests against PHP 7.3, ensuring that the installed patch version
-# is PHP 7.3.4:
-#
-#   python test-yolo.py 7.3.4
-#
-# Ensure that the installed patch version is PHP 7.3.4:
-#
-#   python test-yolo.py 7.3.4 ExtensionTestCase.testInstalledPatchVersion
-#
-#
-
 import os
 import subprocess
 import shutil
@@ -106,6 +88,9 @@ class AutomergeTestCase(unittest.TestCase):
     def log(self):
         output = self.git(["log", "--pretty=format:%an <%ae> %s"])
         return output
+    
+    def normalize_string(s):
+        return '\n'.join(line.strip() for line in s.strip().splitlines())
 
     def testAutomerge(self):
         self.project_under_test = os.getcwd()
@@ -136,7 +121,10 @@ class AutomergeTestCase(unittest.TestCase):
             self.git(["remote", "add", "origin", "file://" + self.origin])
 
             logOutput = self.log()
-            assert 'Pantheon Automation <bot@getpantheon.com> Initial commit' == logOutput.strip()
+            expected = 'Pantheon Automation <bot@getpantheon.com> Initial commit'
+            print('EXPECTED:', repr(expected))
+            print('ACTUAL:', repr(logOutput.decode().strip()))
+            assert expected == logOutput.decode().strip()
 
             # CONTROL PART II:
             #
@@ -145,12 +133,16 @@ class AutomergeTestCase(unittest.TestCase):
             self.createBranch('default')
             os.mkdir(self.repo + '/.circleci')
             self.writeFile('.circleci/config.yml', '# Fake CircleCI configuration file')
+            os.mkdir(self.repo + '/.github')
+            os.mkdir(self.repo + '/.github/workflows')
+            self.writeFile('.github/workflows/update_tag1_d7es.yml', '# Fake GHA Workflow file')
             self.git(["add", '.circleci/config.yml'])
+            self.git(["add", '.github/workflows/update_tag1_d7es.yml'])
             self.commitAsBot("Add CircleCI configuration")
 
             logOutput = self.log()
             assert """Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # TEST SIMPLE AUTOMERGE AS BOT:
             #
@@ -164,7 +156,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             # Assert that our test commit is now at the HEAD of the default branch.
             assert """Pantheon Automation <bot@getpantheon.com> Add a test commit
 Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # Run our test!
             automergeOutput = self.runAutomerge()
@@ -177,7 +169,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             # now in the second position after it.
             assert """Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             self.switchBranch('master')
             logOutput = self.log()
@@ -185,7 +177,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             # Assert that the commit we added to 'default' now exists on
             # the 'master' branch, but the CircleCI commit does not.
             assert """Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # TEST AUTOMERGE AS USER
             #
@@ -196,13 +188,14 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             self.commitAsUser('Add a commit as a user')
             logOutput = self.log()
 
-            print "Log output in question: " + logOutput
+            print("Log output in question:")
+            print(logOutput)
 
             # Assert that our test commit is now at the HEAD of the default branch.
             assert """J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # Run our test!
             automergeOutput = self.runAutomerge()
@@ -210,20 +203,20 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             self.switchBranch('default')
             logOutput = self.log()
 
-            print "Log of default branch after script: " + logOutput
-
+            print("Log of default branch after script: ")
+            print(logOutput)
             # Assert that the 'default' branch has not changed.
             assert """J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             self.switchBranch('master')
             logOutput = self.log()
 
             # Assert that the 'master' branch has not changed.
             assert """Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # TEST AUTOMERGE AS BOT AFTER A COMMIT BY A USER:
             #
@@ -240,7 +233,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
 J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add CircleCI configuration
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             # Run our test!
             automergeOutput = self.runAutomerge()
@@ -255,7 +248,7 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
 Pantheon Automation <bot@getpantheon.com> Simulate a release
 J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
             self.switchBranch('master')
             logOutput = self.log()
@@ -265,11 +258,11 @@ Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
             assert """Pantheon Automation <bot@getpantheon.com> Simulate a release
 J. Doe <doe@example.com> Add a commit as a user
 Pantheon Automation <bot@getpantheon.com> Add a test commit
-Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.strip()
+Pantheon Automation <bot@getpantheon.com> Initial commit""" == logOutput.decode().strip()
 
         finally:
             shutil.rmtree(self.tmpdir)
-            print "Done!"
+            print("Done!")
 
 if __name__ == "__main__":
     unittest.main()

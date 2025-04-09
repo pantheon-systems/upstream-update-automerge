@@ -1,0 +1,10 @@
+name: Upstream Update Automerge
+description: Merge updates from default to master while skipping CI-only commits.
+author: pantheon-systems
+
+runs:
+   using: "composite"
+   steps:
+    - name: Automerge
+      shell: bash
+      run: ${{ github.action_path }}/bin/automerge.sh
