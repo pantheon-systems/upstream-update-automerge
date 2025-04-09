@@ -22,15 +22,16 @@ fi
 git config --global core.pager cat
 
 branch=$(git rev-parse --abbrev-ref HEAD)
-
 if [ "$branch" != "default" ] ; then
   echo "The automerge script is only intended for use on the 'default' branch." >&2
   exit 1
 fi
 
+# Setting $origin in this way allows us to run the test script.
+origin=$(git config --get remote.origin.url) 
 
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch origin master 
+git fetch "$origin" master 
 git checkout master 
 git checkout - 
 
@@ -81,7 +82,7 @@ git rebase master
 
 # Push updated master and default branches back up
 
-git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${REPO}.git"
+git remote set-url "$origin" "https://x-access-token:${PAT_TOKEN}@github.com/${REPO}.git"
 
-git push -u origin master
-git push -u origin default --force
+git push -u "$origin" master
+git push -u "$origin" default --force

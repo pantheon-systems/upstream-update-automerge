@@ -3,24 +3,6 @@
 
 #pylint: disable=broad-except,redefined-outer-name,protected-access,no-name-in-module,not-context-manager
 
-#
-# Usage:
-#
-# Run all tests against PHP 7.3:
-#
-#   python test-yolo.py 7.3
-#
-# Run all tests against PHP 7.3, ensuring that the installed patch version
-# is PHP 7.3.4:
-#
-#   python test-yolo.py 7.3.4
-#
-# Ensure that the installed patch version is PHP 7.3.4:
-#
-#   python test-yolo.py 7.3.4 ExtensionTestCase.testInstalledPatchVersion
-#
-#
-
 import os
 import subprocess
 import shutil
