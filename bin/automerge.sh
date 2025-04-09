@@ -50,7 +50,6 @@ if [ "$author" != "Pantheon Automation bot@getpantheon.com" ] ; then
 fi
 
 echo ":::::::::: Auto-merging to master ::::::::::"
-set -ex
 
 # Log our actions (e.g. cherry-picks) as Pantheon Automation
 git config --global user.email "<bot@getpantheon.com>"
@@ -74,6 +73,7 @@ git rebase master
 # Push updated master and default branches back up
 
 # AUTOMERGE_CI_TESTING is set when testing the script itself with test.py in a GHA.
+# Letting the test implementation bleed into the script itself is bad and I should feel bad, but also I don't care right now.
 if [[ "${AUTOMERGE_CI_TESTING:-}" != "true" ]]; then
   git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 fi
