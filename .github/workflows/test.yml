@@ -17,5 +17,5 @@ jobs:
       - name: Test
         env:
           PAT_TOKEN: "12345"
-          REPO: ${{ github.repository }}
+          AUTOMERGE_CI_TESTING: "true"
         run: python3 test.py
