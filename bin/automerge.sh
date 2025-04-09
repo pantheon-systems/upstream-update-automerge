@@ -12,6 +12,8 @@ if [[ -z "${PAT_TOKEN:-}" ]]; then
   exit 1
 fi
 if [[ -z "${REPO:-}" ]]; then
+  # we want to print this without expansion
+  # shellcheck disable=SC2016
   echo 'The automerge script expects REPO to be set to ${{ github.repository }}, but it is empty.'
   exit 1
 fi
