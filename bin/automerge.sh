@@ -16,7 +16,7 @@ fi
 git config --global core.pager cat
 
 branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$branch" != "default" ] ; then
+if [[ "$branch" != "default" ]] ; then
   echo "The automerge script is only intended for use on the 'default' branch." >&2
   exit 1
 fi
@@ -32,7 +32,7 @@ git checkout -
 commits=$(git log master..HEAD --pretty=format:"%h" -- . ':!.circleci' ':!.github' | sed '1!G;h;$!d')
 
 # If nothing has changed, bail without doing anything.
-if [ -z "$commits" ] ; then
+if [[ -z "$commits" ]] ; then
   echo "Nothing to merge"
   echo "https://i.kym-cdn.com/photos/images/newsfeed/001/240/075/90f.png"
   exit 0
@@ -43,7 +43,7 @@ author="$(git log --pretty=format:"%an %ae" -1)"
 
 # Let commits by any user other than Pantheon Automation sit in the
 # default branch until we get a commit from Pantheon Automation.
-if [ "$author" != "Pantheon Automation bot@getpantheon.com" ] ; then
+if [[ "$author" != "Pantheon Automation bot@getpantheon.com" ]] ; then
   echo "Top commit is not by Pantheon Automation bot. Leaving the following commits on default branch:"
   git log master..HEAD --pretty=format:"%Cred%h %Cblue%cd %Cgreen%an%Creset %s"
   exit 0
