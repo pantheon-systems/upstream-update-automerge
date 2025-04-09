@@ -1,6 +1,6 @@
 #!/bin/bash
-set -o pipefail
-
+set -eou pipefail
+set -x
 #
 # The purpose of this script is to take all of the commits from the "default"
 # branch and merge them onto the "master" branch. When we are doing this, we
