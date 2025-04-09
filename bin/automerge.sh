@@ -4,7 +4,7 @@ set -x
 #
 # The purpose of this script is to take all of the commits from the "default"
 # branch and merge them onto the "master" branch. When we are doing this, we
-# will skip any commit that modifies anything in the `./circleci` directory.
+# will skip any commit that modifies anything in the './circleci' or './github' directory.
 #
 
 if [[ -z "${PAT_TOKEN:-}" ]]; then
