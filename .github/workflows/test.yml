@@ -15,5 +15,6 @@ jobs:
       - run: git config --global user.email "uname@email.com"
       - run: git config --global user.name "User Name"
       - name: Test
-        env: PAT_TOKEN="12345"
+        env:
+          PAT_TOKEN: "12345"
         run: python3 test.py
