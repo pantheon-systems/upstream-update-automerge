@@ -77,7 +77,7 @@ git rebase master
 # Push updated master and default branches back up
 
 # AUTOMERGE_CI_TESTING is set when testing the script itself with test.py in a GHA.
-if [[ "${AUTOMERGE_CI_TESTING:-}" != "true"]]; then
+if [[ "${AUTOMERGE_CI_TESTING:-}" != "true" ]]; then
   git remote set-url "$origin" "https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 fi
 
