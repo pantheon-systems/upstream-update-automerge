@@ -31,3 +31,7 @@ jobs:
 ## Test
 
 python3 test.py
+
+
+## Previous Iterations
+This action is implemented from a version of the script that was previously deployed as a docker image at `quay.io/getpantheon/upstream-update-build:1.x` and used in the CI scripts for `pantheon-systems/WordPress` and `pantheon-systems/drops-7`. The source for that docker image can still be found on the [1.x branch](https://github.com/pantheon-systems/upstream-update-build/tree/1.x).
