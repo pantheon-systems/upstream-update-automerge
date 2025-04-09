@@ -21,11 +21,8 @@ if [ "$branch" != "default" ] ; then
   exit 1
 fi
 
-# Setting $origin in this way allows us to run the test script.
-origin=$(git config --get remote.origin.url) 
-
 # We need to do a little dance to get git to recognize the top commit of the master branch
-git fetch "$origin" master 
+git fetch origin master 
 git checkout master 
 git checkout - 
 
@@ -78,8 +75,8 @@ git rebase master
 
 # AUTOMERGE_CI_TESTING is set when testing the script itself with test.py in a GHA.
 if [[ "${AUTOMERGE_CI_TESTING:-}" != "true" ]]; then
-  git remote set-url "$origin" "https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+  git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 fi
 
-git push -u "$origin" master
-git push -u "$origin" default --force
+git push -u origin master
+git push -u origin default --force
