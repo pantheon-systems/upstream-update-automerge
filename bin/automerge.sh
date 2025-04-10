@@ -72,11 +72,17 @@ git rebase master
 
 # Push updated master and default branches back up
 
+git remote -v
+
 # AUTOMERGE_CI_TESTING is set when testing the script itself with test.py in a GHA.
 # Letting the test implementation bleed into the script itself is bad and I should feel bad, but also I don't care right now.
 if [[ "${AUTOMERGE_CI_TESTING:-}" != "true" ]]; then
+  PAT_USER=$(curl -sH "Authorization: token ${PAT_TOKEN}" https://api.github.com/user | jq -r .login)
+  echo "Personal Access Token authenticated to ${PAT_USER}"
   git remote set-url origin "https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 fi
+
+git remote -v
 
 git push -u origin master
 git push -u origin default --force
