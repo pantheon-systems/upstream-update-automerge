@@ -72,6 +72,8 @@ git rebase master
 
 # Push updated master and default branches back up
 
+git remote -v
+
 # AUTOMERGE_CI_TESTING is set when testing the script itself with test.py in a GHA.
 # Letting the test implementation bleed into the script itself is bad and I should feel bad, but also I don't care right now.
 if [[ "${AUTOMERGE_CI_TESTING:-}" != "true" ]]; then
